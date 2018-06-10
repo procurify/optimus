@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schema Transformer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>Schema Transformer</h1>
+<div class="container" id="app">
+    <div class="left-column" id="source">
+        <pre v-html="input_json"></pre>
+    </div>
+    <div class="right-column">
+        <pre v-html="schema"></pre>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash"></script>
+
+
+<script>
+    function isPlainObject(obj) {
+        return obj ? typeof obj === 'object' && Object.getPrototypeOf(obj) === Object.prototype : false;
+    }
+
+    const supportType = ['string', 'number', 'array', 'object', 'boolean', 'integer'];
+
+    function getType(type) {
+        if (!type) type = 'string';
+        if (supportType.indexOf(type) !== -1) {
+            return type;
+        }
+        return typeof type;
+    }
+
+    function isSchema(object) {
+        if (supportType.indexOf(object.type) !== -1) {
+            return true;
+        }
+        return false;
+    }
+
+    function handleSchema(json, schema) {
+        Object.assign(schema, json);
+        if (schema.type === 'object') {
+            delete schema.properties;
+            parse(json.properties, schema);
+        }
+        if (schema.type === 'array') {
+            delete schema.items;
+            schema.items = {};
+            parse(json.items, schema.items)
+        }
+
+    }
+
+    function handleArray(arr, schema) {
+        schema.type = 'array';
+        var props = schema.items = {};
+        parse(arr[0], props)
+    }
+
+    function handleObject(json, schema) {
+        if (isSchema(json)) {
+            return handleSchema(json, schema)
+        }
+        schema.type = 'object';
+        schema.required = [];
+        var props = schema.properties = {};
+        for (var key in json) {
+            var item = json[key];
+            var curSchema = props[key] = {};
+            if (key[0] === '*') {
+                delete props[key];
+                key = key.substr(1);
+                schema.required.push(key);
+                curSchema = props[key] = {};
+
+            }
+            parse(item, curSchema)
+        }
+    }
+
+    function parse(json, schema) {
+        if (Array.isArray(json)) {
+            handleArray(json, schema)
+        } else if (isPlainObject(json)) {
+            handleObject(json, schema)
+        } else {
+            schema.type = getType(json)
+            schema.source = 'xxx'
+        }
+    }
+
+</script>
+
+<script>
+    function syntaxHighlight(json) {
+        if (typeof json != 'string') {
+            json = JSON.stringify(json, undefined, 2);
+        }
+
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    }
+
+</script>
+
+<script>
+    data = {
+        'input_json': '',
+        'schema': {},
+        'transformation': '',
+    }
+
+    const app = new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: data,
+        methods: {},
+        watch: {}
+    });
+
+    const input_json = JSON.parse('{{ input_json|safe }}')
+    data.input_json = syntaxHighlight(input_json)
+    let schema = {}
+    parse(input_json, schema)
+    data.schema = syntaxHighlight(schema)
+    
+
+</script>
+
+</body>
+</html>
