@@ -8,10 +8,15 @@
 <h1>Schema Transformer</h1>
 <div class="container" id="app">
     <div class="left-column" id="source">
-        <pre v-html="input_json"></pre>
+        <pre v-html="displayable_input_json"></pre>
+    </div>
+    <div class="mid-column">
+        <pre v-html="displayable_schema" 
+        	 contenteditable="true"
+        	 v-on:input="get_transformed_data"></pre>
     </div>
     <div class="right-column">
-        <pre v-html="schema"></pre>
+        <pre v-html="displayable_output_json"></pre>
     </div>
 </div>
 
@@ -20,6 +25,8 @@
 
 
 <script>
+	const print = console.log
+
     function isPlainObject(obj) {
         return obj ? typeof obj === 'object' && Object.getPrototypeOf(obj) === Object.prototype : false;
     }
@@ -43,6 +50,7 @@
 
     function handleSchema(json, schema) {
         Object.assign(schema, json);
+        
         if (schema.type === 'object') {
             delete schema.properties;
             parse(json.properties, schema);
@@ -52,16 +60,16 @@
             schema.items = {};
             parse(json.items, schema.items)
         }
-
     }
 
-    function handleArray(arr, schema) {
+    function handleArray(arr, schema, key) {
         schema.type = 'array';
         var props = schema.items = {};
+        schema.source = key + '[*]'
         parse(arr[0], props)
     }
 
-    function handleObject(json, schema) {
+    function handleObject(json, schema, key) {
         if (isSchema(json)) {
             return handleSchema(json, schema)
         }
@@ -76,20 +84,23 @@
                 key = key.substr(1);
                 schema.required.push(key);
                 curSchema = props[key] = {};
-
             }
-            parse(item, curSchema)
+            curSchema.source = key
+            parse(item, curSchema, key)
         }
     }
 
-    function parse(json, schema) {
+    function parse(json, schema, key) {
         if (Array.isArray(json)) {
-            handleArray(json, schema)
+            handleArray(json, schema, key)
         } else if (isPlainObject(json)) {
-            handleObject(json, schema)
+            handleObject(json, schema, key)
+	        if (schema.required != undefined && schema.required.length == 0) {
+	        	delete schema.required
+	        }
         } else {
             schema.type = getType(json)
-            schema.source = 'xxx'
+            schema.source = key
         }
     }
 
@@ -124,7 +135,11 @@
 <script>
     data = {
         'input_json': '',
-        'schema': {},
+        'displayable_input_json': '',
+        'schema': '',
+        'displayable_schema': '',
+        'output_json': '',
+        'displayable_output_json': '',
         'transformation': '',
     }
 
@@ -132,16 +147,42 @@
         el: '#app',
         delimiters: ['${', '}'],
         data: data,
-        methods: {},
-        watch: {}
+        methods: {
+        	get_transformed_data: _.debounce(function (event) {
+        		data.schema = JSON.parse(event.target.innerText)
+
+    			var xhr = new XMLHttpRequest();
+				xhr.open("POST", '/transform/', true);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.onreadystatechange = function() {
+				    if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+				        data.output_json = JSON.parse(this.response)
+				        data.displayable_output_json = syntaxHighlight(data.output_json)
+				    }
+				}
+				xhr.send(JSON.stringify({
+					"input_json": data.input_json,
+					"schema": data.schema
+				}));
+
+				data.displayable_schema = JSON.stringify(data.schema, undefined, 2)
+            }, 1000)
+        },
+        watch: {
+        	schema: function (val) {
+
+        	}
+        }
     });
 
     const input_json = JSON.parse('{{ input_json|safe }}')
-    data.input_json = syntaxHighlight(input_json)
+    data.input_json = input_json
+    data.displayable_input_json = syntaxHighlight(input_json)
     let schema = {}
     parse(input_json, schema)
-    data.schema = syntaxHighlight(schema)
-    
+
+    data.schema = schema
+    data.displayable_schema = JSON.stringify(schema, undefined, 2)
 
 </script>
 

@@ -1,5 +1,5 @@
 {
-    "bill_address_attention": "Fairfield Manufacturing Co.",
+    "bill_address_attention": "Fairfield Manufacturing Co. Inc. dba Oerlikon Fairfield",
     "bill_address_city": "Lafayette",
     "bill_address_country": "US",
     "bill_address_line1": "PO Box 7940, 2400 Sagamore Parkway ,South",
@@ -10,20 +10,17 @@
     "custom_fields": {},
     "date": "2018-06-02T06:36:21Z",
     "discount": "0",
-    "external_id": "15",
+    "external_id": null,
     "freight": "11.000000",
     "id": 15,
-    "test": {
-      "foo": "bar"
-    },
     "items": [
         {
             "account": "800820",
             "custom_fields": {
-                "Cost Center": "xxx",
-                "Manufacturer Name + Number": "yyy",
-                "Part Number": "4745451",
-                "Urgency": "5 - Need ASAP No Air Freight"
+                "cost-center": "xxx",
+                "manufacturer-name-number": "yyy",
+                "part-number": "4745451",
+                "urgency": "5 - Need ASAP No Air Freight"
             },
             "department": "",
             "external_id": null,
@@ -43,7 +40,7 @@
     "other": "2.000000",
     "promise_date": "2018-06-02T06:36:24Z",
     "recordtype": "",
-    "ship_address_attention": "Fairfield Manufacturing Co.",
+    "ship_address_attention": "Fairfield Manufacturing Co. Inc. dba Oerlikon Fairfield",
     "ship_address_city": "Lafayette",
     "ship_address_country": "US",
     "ship_address_line1": "PO Box 7940, 2400 Sagamore Parkway ,South",
@@ -53,7 +50,7 @@
     "shipping_terms": "None",
     "status": "0",
     "tax": "5.000000",
-    "terms": null,
+    "terms": "Net 30",
     "total": "68.00",
     "vendor": {
         "address": [
@@ -71,7 +68,7 @@
         "city": "anywhere",
         "country": "US",
         "email": null,
-        "external_id": "24",
+        "external_id": null,
         "fax": "",
         "headquarter": "",
         "id": 24,

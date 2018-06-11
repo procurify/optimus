@@ -14,29 +14,25 @@ expected_output = {
 	'vendor': 'vendor.name'
 }
 
-
-def generate_schema(input_data):
-	pass
-
 def generate_transformation(schema, source_prefix=''):
 	output = {}
 
-	for key, value in schema['properties'].items():	
+	for key, value in schema['properties'].items():
+		_source_prefix = source_prefix + '.' if source_prefix else ''
+
 		if value['type'] == 'array':
+
 			output[key] = [generate_transformation(
 				schema=value['items'],
-				source_prefix=value['source']
+				source_prefix=_source_prefix + value['source']
 			)]
 		elif value['type'] == 'object':
 			output[key] = generate_transformation(
 				schema=value,
-				source_prefix=value['source']
+				source_prefix=_source_prefix + value['source']
 			)
 		else:
-			source = value['source']
-			if source_prefix:
-				source = source_prefix + '.' + source
-			output[key] = source
+			output[key] = _source_prefix + value['source']
 
 	return output
 
@@ -50,7 +46,12 @@ def transformer(input_data, transformation):
 		elif isinstance(value, dict):
 			output[key] = transformer(input_data, value)
 		else:
-			expr = parse(value)
-			output[key] = [m.value for m in expr.find(input_data)][0]
+			if value.startswith('='):
+				output[key] = value[1:]
+			elif '.=' in value:
+				output[key] = value.split('.=')[-1]
+			else:
+				expr = parse(value)
+				output[key] = [m.value for m in expr.find(input_data)][0]
 
 	return output

@@ -14,14 +14,19 @@ def index():
     with open('input.json', 'r') as fsock:
         input_data =  json.loads(fsock.read())
 
-    with open('schema.json', 'r') as fsock:
-        schema = json.loads(fsock.read())
-
-    transformation = generate_transformation(schema)
-
-    print(transformer(input_data, transformation))
-    # validate(transformation, schema)
-
     context = dict(input_json=json.dumps(input_data))
     return render_template('index.html', **context)
 
+
+@app.route('/transform/', methods=['POST'])
+def transform_json():
+    request_json = request.get_json(silent=True)
+    transformation = generate_transformation(request_json['schema'])
+
+    transformed_data = transformer(
+        request_json['input_json'], 
+        transformation
+    )
+
+    # validate(transformed_data, request_json['schema'])
+    return jsonify(transformed_data)
