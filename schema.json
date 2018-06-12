@@ -1,60 +1,60 @@
 {
-    "$schema": "http://json-schema.org/draft-06/schema#",
-    "description": "Schema for Purchase Order object",
-    "properties": {
-        "date": {
-            "description": "Date of purchase order",
-            "source": "date",
-            "type": "string"
-        },
-        "id": {
-            "description": "The unique identifier for a purchase order",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "Schema for Purchase Order object",
+  "properties": {
+    "date": {
+      "description": "Date of purchase order",
+      "source": "date",
+      "type": "string"
+    },
+    "id": {
+      "description": "The unique identifier for a purchase order",
+      "source": "id",
+      "type": "integer"
+    },
+    "items": {
+      "description": "List of purchase order items",
+      "items": {
+        "description": "Order item schema",
+        "properties": {
+          "id": {
+            "description": "The unique identifier for an order item",
             "source": "id",
             "type": "integer"
-        },
-        "items": {
-            "description": "List of purchase order items",
-            "items": {
-                "description": "Order item schema",
-                "properties": {
-                    "id": {
-                        "description": "The unique identifier for an order item",
-                        "source": "id",
-                        "type": "integer"
-                    },
-                    "name": {
-                        "description": "Order item name",
-                        "source": "name",
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "source": "items[*]",
-            "type": "array"
-        },
-        "test": {
-            "description": "Test",
-            "properties": {
-                "bar": {
-                    "description": "foo field",
-                    "source": "foo",
-                    "type": "string"
-                }
-            },
-            "source": "test",
-            "type": "object"
-        },
-        "vendor": {
-            "description": "Vendor for the purchase order",
-            "source": "vendor.name",
+          },
+          "name": {
+            "description": "Order item name",
+            "source": "name",
             "type": "string"
-        }
+          }
+        },
+        "type": "object"
+      },
+      "source": "items[*]",
+      "type": "array"
     },
-    "required": [
-        "id",
-        "date"
-    ],
-    "title": "Purchase Order Schema",
-    "type": "object"
+    "test": {
+      "description": "Test",
+      "properties": {
+        "bar": {
+          "description": "foo field",
+          "source": "foo",
+          "type": "string"
+        }
+      },
+      "source": "test",
+      "type": "object"
+    },
+    "vendor": {
+      "description": "Vendor for the purchase order",
+      "source": "vendor.name",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "date"
+  ],
+  "title": "Purchase Order Schema",
+  "type": "object"
 }
