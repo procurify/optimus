@@ -1,12 +1,12 @@
-from collections import namedtuple
-from jsonpath_rw import parse
 import inspect
 import functions
+from collections import namedtuple
+from jsonpath_rw import parse
 
 Function = namedtuple('Function', ['name', 'values', 'args', ])
 
 
-def _handle_function_value(input_data, func):
+def _handle_function(input_data, func):
     function = getattr(functions, func.name, None)
     assert function is not None, (
         "{} is not an available function"
@@ -27,16 +27,8 @@ def _handle_function_value(input_data, func):
             len(_required_no_args), len(args)
         )
     )
+
     return function(*args)
-
-
-def _handle_string_value(value):
-    result = value
-    if value.startswith('='):
-        result = value[1:]
-    elif '.=' in value:
-        result = value.split('.=')[-1]
-    return result
 
 
 def generate_transformation(schema, source_prefix=''):
@@ -81,9 +73,7 @@ def transformer(input_data, transformation):
             output[key] = transformer(input_data, value)
         else:
             if isinstance(value, Function):
-                output[key] = _handle_function_value(input_data, func=value)
-            elif value.startswith('=') or '.=' in value:
-                output[key] = _handle_string_value(value)
+                output[key] = _handle_function(input_data, func=value)
             else:
                 expr = parse(value)
                 output[key] = [m.value for m in expr.find(input_data)][0]
