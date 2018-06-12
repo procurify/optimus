@@ -9,6 +9,7 @@ name = "pypi"
 jsonschema = "*"
 jsonpath-rw = "*"
 flask = "*"
+arrow = "*"
 
 [requires]
 python_version = "2.7"

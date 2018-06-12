@@ -4,8 +4,8 @@
   "properties": {
     "date": {
       "description": "Date of purchase order",
-      "source": "date",
-      "type": "string"
+      "source": ["format_date", ["date", "yyyy-mm-dd"]],
+      "type": "function"
     },
     "id": {
       "description": "The unique identifier for a purchase order",

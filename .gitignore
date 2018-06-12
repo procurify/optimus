@@ -5,6 +5,7 @@
 *.DS_Store
 .AppleDouble
 .LSOverride
+.gitconfig
 
 # Icon must end with two \r
 Icon
