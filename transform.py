@@ -55,11 +55,10 @@ def generate_transformation(input_data, schema, source_prefix=''):
                 source_prefix=_source_prefix + value['source']
             )]
 
-            print(output[key])
             if not value['source'].endswith('[*]'):
                 continue
 
-            expr = parse(value['source'])
+            expr = parse(source_prefix + '.' + value['source'])
             data_items = [i.value for i in expr.find(input_data)]
             results = []
             for index in range(len(data_items)):
@@ -121,5 +120,4 @@ def apply_transformation(input_data, transformation):
 
 def transformer(input_data, schema):
     transformation = generate_transformation(input_data, schema)
-    print(transformation)
     return apply_transformation(input_data, transformation)
