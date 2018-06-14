@@ -13,19 +13,18 @@ def _handle_function(input_data, func):
         "{} is not an available function"
     ).format(func.name)
 
-    _values = func.values
     values = []
-    for value in _values:
+    for value in func.values:
         expr = parse(value)
         parsed_value = [m.value for m in expr.find(input_data)][0]
         values.append(parsed_value)
-    assert len(_values) == len(values), "Unable parse some values"
+    assert len(func.values) == len(values), "Unable parse some values"
 
     args = values + func.args
-    _required_no_args = inspect.getargspec(function).args
-    assert len(_required_no_args) == len(args), (
+    _required_no_of_args = inspect.getargspec(function).args
+    assert len(_required_no_of_args) == len(args), (
         "Number of arguments mismatch. {} != {}".format(
-            len(_required_no_args), len(args)
+            len(_required_no_of_args), len(args)
         )
     )
 
@@ -58,14 +57,20 @@ def generate_transformation(input_data, schema, source_prefix=''):
             if not value['source'].endswith('[*]'):
                 continue
 
-            expr = parse(source_prefix + '.' + value['source'])
+            expr = parse(_source_prefix + value['source'])
             data_items = [i.value for i in expr.find(input_data)]
             results = []
             for index in range(len(data_items)):
                 result_item = {}
                 for _key, _value in output[key][0].items():
-                    result_item[_key] = _rreplace(
-                        _value, '[*]', '[{}]'.format(index), 1)
+
+                    _value_type = value['items']['properties'][_key]['type']
+                    if _value_type in ('function', 'tuple'):
+                        result_item[_key] = _value
+                    else:
+                        result_item[_key] = _rreplace(
+                            _value, '[*]', '[{}]'.format(index), 1)
+
                 results.append(result_item)
             output[key] = results
 

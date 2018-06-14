@@ -1,14 +1,14 @@
 import arrow
 
-__all__ = ['string_literal', 'default_value', 'format_date']
+__all__ = ['string_literal', 'default_value', 'format_date', 'reverse']
 
 
 def string_literal(value):
     return value
 
 
-def default_value(value, default_value):
-    return value if value else default_value
+def default_value(value, alternate_value):
+    return value if value else alternate_value
 
 
 def format_date(value, format):
