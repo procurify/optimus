@@ -1,7 +1,7 @@
 import json
 from flask import Flask, jsonify
-from flask import render_template, request, abort
-from transform import generate_transformation, transformer
+from flask import render_template, request
+from transform import transformer
 
 app = Flask(__name__)
 
@@ -18,11 +18,9 @@ def index():
 @app.route('/transform/', methods=['POST'])
 def transform_json():
     request_json = request.get_json(silent=True)
-    transformation = generate_transformation(request_json['schema'])
-
     transformed_data = transformer(
         request_json['input_json'],
-        transformation
+        request_json['schema']
     )
 
     # validate(transformed_data, request_json['schema'])

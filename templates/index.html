@@ -31,7 +31,10 @@
         return obj ? typeof obj === 'object' && Object.getPrototypeOf(obj) === Object.prototype : false;
     }
 
-    const supportType = ['string', 'number', 'array', 'object', 'boolean', 'integer'];
+    const supportType = [
+        'string', 'number', 'array', 'object',
+        'boolean', 'integer', 'function', 'tuple'
+    ];
 
     function getType(type) {
         if (!type) type = 'string';
@@ -63,10 +66,15 @@
     }
 
     function handleArray(arr, schema, key) {
-        schema.type = 'array';
-        var props = schema.items = {};
+        schema.type = 'tuple'
         schema.source = key + '[*]'
-        parse(arr[0], props)
+        if (arr.length > 0) {
+            if (typeof arr[0] === "object") {
+                schema.type = 'array'
+                var props = schema.items = {}
+                parse(arr[0], props)
+            }
+        }
     }
 
     function handleObject(json, schema, key) {
