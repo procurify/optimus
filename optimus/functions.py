@@ -1,6 +1,6 @@
 import arrow
 
-__all__ = ['string_literal', 'default_value', 'format_date', 'reverse']
+__all__ = ['string_literal', 'default_value', 'format_date']
 
 
 def string_literal(value):
@@ -14,8 +14,3 @@ def default_value(value, alternate_value):
 def format_date(value, format):
     date_value = arrow.get(value)
     return date_value.format(format)
-
-
-def reverse(value):
-    return value[::-1]
-

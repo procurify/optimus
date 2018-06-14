@@ -4,6 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+pytest = "*"
+"flake8" = "*"
+pytest-cov = "*"
+"pytest-flake8" = "*"
 
 [packages]
 jsonschema = "*"

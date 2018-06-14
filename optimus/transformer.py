@@ -1,7 +1,9 @@
 import inspect
-import functions
+from optimus import functions
 from collections import namedtuple
 from jsonpath_rw import parse
+
+from optimus.utils import rreplace
 
 Tuple = namedtuple('Tuple', ['path'])
 Function = namedtuple('Function', ['name', 'values', 'args'])
@@ -31,16 +33,6 @@ def _handle_function(input_data, func):
     return function(*args)
 
 
-def _rreplace(s, old, new, occurrence):
-    if isinstance(s, dict):
-        result = {}
-        for key, value in s.items():
-            result[key] = _rreplace(value, old, new, occurrence)
-        return result
-    li = s.rsplit(old, occurrence)
-    return new.join(li)
-
-
 def generate_transformation(input_data, schema, source_prefix=''):
     output = {}
 
@@ -68,7 +60,7 @@ def generate_transformation(input_data, schema, source_prefix=''):
                     if _value_type in ('function', 'tuple'):
                         result_item[_key] = _value
                     else:
-                        result_item[_key] = _rreplace(
+                        result_item[_key] = rreplace(
                             _value, '[*]', '[{}]'.format(index), 1)
 
                 results.append(result_item)
@@ -123,6 +115,6 @@ def apply_transformation(input_data, transformation):
     return output
 
 
-def transformer(input_data, schema):
+def transform(input_data, schema):
     transformation = generate_transformation(input_data, schema)
     return apply_transformation(input_data, transformation)

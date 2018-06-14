@@ -1,14 +1,14 @@
 import json
 from flask import Flask, jsonify
 from flask import render_template, request
-from transform import transformer
+from optimus.transformer import transform
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    with open('input.json', 'r') as fsock:
+    with open('tests/fixture_files/purchase_order.json', 'r') as fsock:
         input_data = json.loads(fsock.read())
 
     context = dict(input_json=json.dumps(input_data))
@@ -18,7 +18,7 @@ def index():
 @app.route('/transform/', methods=['POST'])
 def transform_json():
     request_json = request.get_json(silent=True)
-    transformed_data = transformer(
+    transformed_data = transform(
         request_json['input_json'],
         request_json['schema']
     )
