@@ -1,0 +1,30 @@
+{
+    "address": [
+        {
+            "address_line1": "4474 Guion Rd",
+            "address_line2": "",
+            "city": "Rockville",
+            "country": "USA",
+            "state": "IN",
+            "zip": "47872"
+        }
+    ],
+    "addressLineOne": "4474 Guion Rd",
+    "addressLineTwo": "",
+    "city": "Rockville",
+    "country": "USA",
+    "email": "info@bairdsawmill.com",
+    "external_id": "16",
+    "fax": "+1 765-569-6721",
+    "headquarter": "",
+    "id": 16,
+    "is_1099_eligible": false,
+    "name": "Baird Sawmill",
+    "phoneOne": "+1 765-569-6721",
+    "phoneTwo": "",
+    "postalCode": "47872",
+    "recordtype": "",
+    "state_province": "IN",
+    "terms": "30 - Net 30",
+    "url": ""
+}
