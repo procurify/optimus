@@ -76,3 +76,49 @@ def test_format_date(purchase_order_data, purchase_order_schema):
 
     assert purchase_order_data != transformed_data
     assert transformed_data['date'] == '02-06-2018'
+
+
+def test_boolean(vendor_data, vendor_schema):
+    vendor_schema['properties']['is_1099_eligible'] = {
+        'type': 'function',
+        'source': ['boolean', ['is_1099_eligible'], ['T', 'F']]
+    }
+
+    transformed_data = transform(
+        vendor_data,
+        vendor_schema
+    )
+
+    assert vendor_data != transformed_data
+    assert transformed_data['is_1099_eligible'] == 'F'
+
+
+def test_alpha_2_country_with_valid_country(vendor_data, vendor_schema):
+    vendor_schema['properties']['country'] = {
+        'type': 'function',
+        'source': ['alpha_2_country', ['country'], []]
+    }
+
+    transformed_data = transform(
+        vendor_data,
+        vendor_schema
+    )
+
+    assert vendor_data != transformed_data
+    assert transformed_data['country'] == 'US'
+
+
+def test_alpha_2_country_with_invalid_country(vendor_data, vendor_schema):
+    vendor_data['country'] = 'US of A'
+    vendor_schema['properties']['country'] = {
+        'type': 'function',
+        'source': ['alpha_2_country', ['country'], []]
+    }
+
+    transformed_data = transform(
+        vendor_data,
+        vendor_schema
+    )
+
+    assert vendor_data != transformed_data
+    assert transformed_data['country'] == ''

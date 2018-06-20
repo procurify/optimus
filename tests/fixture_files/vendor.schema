@@ -1,0 +1,110 @@
+{
+  "type": "object",
+  "properties": {
+    "state_province": {
+      "source": "state_province",
+      "type": "string"
+    },
+    "city": {
+      "source": "city",
+      "type": "string"
+    },
+    "fax": {
+      "source": "fax",
+      "type": "string"
+    },
+    "terms": {
+      "source": "terms",
+      "type": "string"
+    },
+    "name": {
+      "source": "name",
+      "type": "string"
+    },
+    "addressLineTwo": {
+      "source": "addressLineTwo",
+      "type": "string"
+    },
+    "addressLineOne": {
+      "source": "addressLineOne",
+      "type": "string"
+    },
+    "country": {
+      "source": "country",
+      "type": "string"
+    },
+    "phoneTwo": {
+      "source": "phoneTwo",
+      "type": "string"
+    },
+    "headquarter": {
+      "source": "headquarter",
+      "type": "string"
+    },
+    "is_1099_eligible": {
+      "source": "is_1099_eligible",
+      "type": "string"
+    },
+    "id": {
+      "source": "id",
+      "type": "number"
+    },
+    "phoneOne": {
+      "source": "phoneOne",
+      "type": "string"
+    },
+    "url": {
+      "source": "url",
+      "type": "string"
+    },
+    "address": {
+      "source": "address[*]",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "address_line2": {
+            "source": "address_line2",
+            "type": "string"
+          },
+          "city": {
+            "source": "city",
+            "type": "string"
+          },
+          "address_line1": {
+            "source": "address_line1",
+            "type": "string"
+          },
+          "zip": {
+            "source": "zip",
+            "type": "string"
+          },
+          "country": {
+            "source": "country",
+            "type": "string"
+          },
+          "state": {
+            "source": "state",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "postalCode": {
+      "source": "postalCode",
+      "type": "string"
+    },
+    "external_id": {
+      "source": "external_id",
+      "type": "string"
+    },
+    "email": {
+      "source": "email",
+      "type": "string"
+    },
+    "recordtype": {
+      "source": "recordtype",
+      "type": "string"
+    }
+  }
+}
