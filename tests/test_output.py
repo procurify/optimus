@@ -69,3 +69,17 @@ def test_root_field_to_nested_field_mapping(
     )
 
     assert transformed_data['comment'] == purchase_order_data['vendor']['name']
+
+
+def test_missing_field_in_source_data(
+        purchase_order_data, purchase_order_schema):
+    for item in purchase_order_data['items']:
+        del item['custom_fields']['cost-center']
+
+    transformed_data = transform(
+        purchase_order_data,
+        purchase_order_schema
+    )
+
+    for item in transformed_data['items']:
+        assert item['custom_fields']['cost-center'] == ''

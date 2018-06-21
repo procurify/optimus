@@ -110,7 +110,8 @@ def apply_transformation(input_data, transformation):
                 output[key] = [m.value for m in expr.find(input_data)]
             else:
                 expr = parse(value)
-                output[key] = [m.value for m in expr.find(input_data)][0]
+                output_value = [m.value for m in expr.find(input_data)]
+                output[key] = output_value[0] if output_value else ''
 
     return output
 

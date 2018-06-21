@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    with open('tests/fixture_files/vendor.json', 'r') as fsock:
+    with open('tests/fixture_files/purchase_order.json', 'r') as fsock:
         input_data = json.loads(fsock.read())
 
     context = dict(input_json=json.dumps(input_data))
