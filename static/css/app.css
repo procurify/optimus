@@ -1,0 +1,17 @@
+h1 {
+    text-align: center;
+}
+.full-width {
+    width: 100%;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.left-column, .mid-column, .right-column {
+    background: #e6e6e6;
+    padding: 10px;
+}
