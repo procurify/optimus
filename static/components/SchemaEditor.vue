@@ -7,7 +7,6 @@
 <script>
     import {debounce} from 'lodash';
 
-
     const schema_generator = (function (source) {
         const schema = {}
 
@@ -99,6 +98,56 @@
         return schema
     })
 
+    const json_formatter = (function (source) {
+        const NUM_TYPE = 'number'
+        const STR_TYPE = 'string'
+        const BOOL_TYPE = 'boolean'
+        const ARR_TYPE = 'array'
+        const OBJ_TYPE = 'object'
+
+        const get_type = function (data) {
+            const data_type = typeof data
+            if (data_type === OBJ_TYPE) {
+                if (Array.isArray(data_type)) {
+                    return ARR_TYPE
+                }
+                return OBJ_TYPE
+            }
+            return data_type
+        }
+
+        const iterate = function (data) {
+            let output = ''
+            const data_type = get_type(data)
+
+            console.log(data_type)
+
+            if (data_type === ARR_TYPE) {
+                output += '<ul>'
+                for (let item of data) {
+                    output += iterate(item)
+                }
+                output += '</ul>'
+            } else if (data_type === OBJ_TYPE) {
+                output += '<ul>'
+                for (const [key, value] of Object.entries(data)) {
+                    const _data_type = get_type(value)
+                    if (_data_type === ARR_TYPE || _data_type === OBJ_TYPE) {
+                        output += `<li>${key} ${iterate(value)}</li>`
+                    } else {
+                        output += iterate(`${key}: ${value}`)
+                    }
+                }
+                output += '</ul>'
+            }
+
+            output += `<li>${data}</li>`
+            return output
+        }
+
+        return iterate(source)
+    })
+
     const data = {
         schema: null,
     }
@@ -114,6 +163,7 @@
             update_schema: debounce(function (event) {
                 data.schema = JSON.parse(event.target.innerText)
                 this.$emit('schema_generated', data.schema)
+                console.log(json_formatter(data.schema))
             }, 1000)
         },
         watch: {

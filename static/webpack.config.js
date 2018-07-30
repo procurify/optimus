@@ -11,7 +11,6 @@ function resolve(dir) {
 
 
 module.exports = {
-    // mode: 'development',
     entry: [
         './static/index.js'
     ],

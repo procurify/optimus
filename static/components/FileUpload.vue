@@ -1,14 +1,13 @@
 <template>
     <div>
-        <input type="file" @change="read_file" v-if="source_json === null"/>
-        <pre>{{ source_json }}</pre>
+        <input type="file" @change="read_file" v-if="source === null"/>
+        <pre>{{ source }}</pre>
     </div>
 </template>
 
 <script>
-
     const data = {
-        source_json: null
+        source: null,
     }
 
     export default {
@@ -27,8 +26,8 @@
                 }
                 const reader = new FileReader()
                 reader.onload = function (e) {
-                    data.source_json = JSON.parse(e.target.result)
-                    self.$emit('file_uploaded', data.source_json)
+                    data.source = JSON.parse(e.target.result)
+                    self.$emit('file_uploaded', data.source)
                 }
                 reader.readAsText(file)
             }
