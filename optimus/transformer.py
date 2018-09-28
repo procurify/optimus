@@ -1,8 +1,9 @@
 import inspect
-from optimus import functions
 from collections import namedtuple
+
 from jsonpath_rw import parse
 
+from optimus import functions
 from optimus.utils import rreplace
 
 Tuple = namedtuple('Tuple', ['path'])
@@ -39,36 +40,35 @@ def generate_transformation(input_data, schema, source_prefix=''):
     for key, value in schema['properties'].items():
         _source_prefix = source_prefix + '.' if source_prefix else ''
 
-        if value['type'] == 'array':
-            output[key] = [generate_transformation(
-                input_data=input_data,
-                schema=value['items'],
-                source_prefix=_source_prefix + value['source']
-            )]
+        _input_data = ''
+        if value['type'] in ('array', 'object'):
+            expr = parse(value['source'])
+            _input_data = [i.value for i in expr.find(input_data)]
 
+        if value['type'] == 'array':
             if not value['source'].endswith('[*]'):
                 continue
 
-            expr = parse(_source_prefix + value['source'])
-            data_items = [i.value for i in expr.find(input_data)]
-            results = []
-            for index in range(len(data_items)):
-                result_item = {}
-                for _key, _value in output[key][0].items():
+            _results = []
+            for index, item in enumerate(_input_data):
+                _source_suffix = rreplace(
+                    value['source'],
+                    '[*]',
+                    '[{}]'.format(index),
+                    1
+                )
 
-                    _value_type = value['items']['properties'][_key]['type']
-                    if _value_type in ('function', 'tuple'):
-                        result_item[_key] = _value
-                    else:
-                        result_item[_key] = rreplace(
-                            _value, '[*]', '[{}]'.format(index), 1)
+                _results.append(generate_transformation(
+                    input_data=item,
+                    schema=value['items'],
+                    source_prefix=_source_prefix + _source_suffix
+                ))
 
-                results.append(result_item)
-            output[key] = results
+            output[key] = _results
 
         elif value['type'] == 'object':
             output[key] = generate_transformation(
-                input_data=input_data,
+                input_data=_input_data[0],
                 schema=value,
                 source_prefix=_source_prefix + value['source']
             )

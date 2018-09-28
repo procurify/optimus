@@ -1,0 +1,44 @@
+{
+  "name": "optimus",
+  "version": "1.0.0",
+  "description": "A schema transformation tool using JSON Schema and JSONPath",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production webpack --mode=production --config static/webpack.config.js",
+    "dev": "NODE_ENV=development webpack-dev-server --mode=development --config static/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/procurify/optimus.git"
+  },
+  "keywords": [
+    "schema",
+    "tranformation"
+  ],
+  "author": "Nav Aulakh <nav@navaulakh.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/procurify/optimus/issues"
+  },
+  "homepage": "https://github.com/procurify/optimus#readme",
+  "dependencies": {
+    "json-formatter-js": "^2.2.0",
+    "lodash": "^4.17.10",
+    "vue": "^2.5.16"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^1.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "vue-loader": "^15.2.6",
+    "vue-style-loader": "^4.1.1",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
+  }
+}

@@ -5,92 +5,21 @@
       "source": "comment",
       "type": "string"
     },
-    "total": {
-      "source": "total",
+    "currency": {
+      "source": "currency",
       "type": "string"
     },
-    "vendor": {
-      "source": "vendor",
-      "type": "object",
-      "properties": {
-        "state_province": {
-          "source": "state_province",
-          "type": "string"
-        },
-        "city": {
-          "source": "city",
-          "type": "string"
-        },
-        "name": {
-          "source": "name",
-          "type": "string"
-        },
-        "addressLineTwo": {
-          "source": "addressLineTwo",
-          "type": "string"
-        },
-        "addressLineOne": {
-          "source": "addressLineOne",
-          "type": "string"
-        },
-        "country": {
-          "source": "country",
-          "type": "string"
-        },
-        "phoneTwo": {
-          "source": "phoneTwo",
-          "type": "string"
-        },
-        "phoneOne": {
-          "source": "phoneOne",
-          "type": "string"
-        },
-        "address": {
-          "source": "address[*]",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "address_line2": {
-                "source": "address_line2",
-                "type": "string"
-              },
-              "city": {
-                "source": "city",
-                "type": "string"
-              },
-              "address_line1": {
-                "source": "address_line1",
-                "type": "string"
-              },
-              "zip": {
-                "source": "zip",
-                "type": "string"
-              },
-              "country": {
-                "source": "country",
-                "type": "string"
-              },
-              "state": {
-                "source": "state",
-                "type": "string"
-              }
-            }
-          }
-        },
-        "postalCode": {
-          "source": "postalCode",
-          "type": "string"
-        },
-        "email": {
-          "source": "email",
-          "type": "string"
-        }
-      }
-    },
-    "recordtype": {
-      "source": "recordtype",
+    "date": {
+      "source": "date",
       "type": "string"
+    },
+    "id": {
+      "source": "id",
+      "type": "number"
+    },
+    "test_items": {
+      "source": "test_items[*]",
+      "type": "tuple"
     },
     "items": {
       "source": "items[*]",
@@ -98,37 +27,9 @@
       "items": {
         "type": "object",
         "properties": {
-          "line_number": {
-            "source": "line_number",
-            "type": "string"
-          },
           "account": {
             "source": "account",
             "type": "string"
-          },
-          "name": {
-            "source": "name",
-            "type": "string"
-          },
-          "price": {
-            "source": "price",
-            "type": "string"
-          },
-          "purchaser_comment": {
-            "source": "purchaser_comment",
-            "type": "string"
-          },
-          "department": {
-            "source": "department",
-            "type": "string"
-          },
-          "external_id": {
-            "source": "external_id",
-            "type": "string"
-          },
-          "id": {
-            "source": "id",
-            "type": "number"
           },
           "custom_fields": {
             "source": "custom_fields",
@@ -151,41 +52,153 @@
                 "type": "string"
               }
             }
+          },
+          "department": {
+            "source": "department",
+            "type": "string"
+          },
+          "external_id": {
+            "source": "external_id",
+            "type": "string"
+          },
+          "id": {
+            "source": "id",
+            "type": "number"
+          },
+          "line_number": {
+            "source": "line_number",
+            "type": "string"
+          },
+          "name": {
+            "source": "name",
+            "type": "string"
+          },
+          "price": {
+            "source": "price",
+            "type": "string"
+          },
+          "purchaser_comment": {
+            "source": "purchaser_comment",
+            "type": "string"
+          },
+          "vendors": {
+            "source": "vendors[*]",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "source": "name",
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
-    },
-    "number": {
-      "source": "number",
-      "type": "string"
-    },
-    "currency": {
-      "source": "currency",
-      "type": "string"
-    },
-    "test_items": {
-      "source": "test_items[*]",
-      "type": "tuple"
     },
     "location": {
       "source": "location",
       "type": "string"
     },
-    "date": {
-      "source": "date",
+    "number": {
+      "source": "number",
       "type": "string"
     },
     "other": {
       "source": "other",
       "type": "string"
     },
-    "id": {
-      "source": "id",
-      "type": "number"
-    },
     "promise_date": {
       "source": "promise_date",
       "type": "string"
+    },
+    "recordtype": {
+      "source": "recordtype",
+      "type": "string"
+    },
+    "total": {
+      "source": "total",
+      "type": "string"
+    },
+    "vendor": {
+      "source": "vendor",
+      "type": "object",
+      "properties": {
+        "address": {
+          "source": "address[*]",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "address_line1": {
+                "source": "address_line1",
+                "type": "string"
+              },
+              "address_line2": {
+                "source": "address_line2",
+                "type": "string"
+              },
+              "city": {
+                "source": "city",
+                "type": "string"
+              },
+              "country": {
+                "source": "country",
+                "type": "string"
+              },
+              "state": {
+                "source": "state",
+                "type": "string"
+              },
+              "zip": {
+                "source": "zip",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "addressLineOne": {
+          "source": "addressLineOne",
+          "type": "string"
+        },
+        "addressLineTwo": {
+          "source": "addressLineTwo",
+          "type": "string"
+        },
+        "city": {
+          "source": "city",
+          "type": "string"
+        },
+        "country": {
+          "source": "country",
+          "type": "string"
+        },
+        "email": {
+          "source": "email",
+          "type": "string"
+        },
+        "name": {
+          "source": "name",
+          "type": "string"
+        },
+        "phoneOne": {
+          "source": "phoneOne",
+          "type": "string"
+        },
+        "phoneTwo": {
+          "source": "phoneTwo",
+          "type": "string"
+        },
+        "postalCode": {
+          "source": "postalCode",
+          "type": "string"
+        },
+        "state_province": {
+          "source": "state_province",
+          "type": "string"
+        }
+      }
     }
   }
 }

@@ -1,18 +1,23 @@
-import json
-from flask import Flask, jsonify
-from flask import render_template, request
+import os
+from flask import Flask, jsonify, render_template, request
 from optimus.transformer import transform
 
 app = Flask(__name__)
 
+PROD_ENV = 'production'
+DEV_ENV = 'development'
+FLASK_ENV = os.environ['FLASK_ENV']
+
+if FLASK_ENV == DEV_ENV:
+    from flask_cors import CORS
+
+    CORS(app)
+
 
 @app.route('/')
 def index():
-    with open('tests/fixture_files/purchase_order.json', 'r') as fsock:
-        input_data = json.loads(fsock.read())
-
-    context = dict(input_json=json.dumps(input_data))
-    return render_template('index.html', **context)
+    context = {}
+    return render_template('old_index.html', **context)
 
 
 @app.route('/transform/', methods=['POST'])

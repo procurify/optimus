@@ -2,10 +2,12 @@
 <html>
 <head>
     <title>Optimus</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.assets') }}">
 </head>
 <body>
 <h1>Optimus</h1>
+<h1>Deprecated: Use http://localhost:8080</h1>
+
 <div class="container" id="app">
     <div class="left-column" id="source">
         <pre v-html="displayable_input_json"></pre>
