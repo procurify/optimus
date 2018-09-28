@@ -6,7 +6,7 @@ DESCRIPTION = 'A schema transformation tool.'
 URL = 'https://github.com/procurify/optimus'
 EMAIL = 'nav@navaulakh.com'
 AUTHOR = 'Nav Aulakh'
-VERSION = '0.1.0'
+VERSION = '0.1.1'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
