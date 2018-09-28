@@ -17,7 +17,7 @@ if FLASK_ENV == DEV_ENV:
 @app.route('/')
 def index():
     context = {}
-    return render_template('index.html', **context)
+    return render_template('old_index.html', **context)
 
 
 @app.route('/transform/', methods=['POST'])

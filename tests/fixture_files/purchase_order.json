@@ -22,13 +22,24 @@
       "line_number": "1",
       "name": "Clinic Equipment",
       "price": "50.00000000",
-      "purchaser_comment": ""
+      "purchaser_comment": "",
+      "vendors": [
+        {
+          "name": "Staples"
+        },
+        {
+          "name": "Amazon.ca"
+        },
+        {
+          "name": "Amazon.com"
+        }
+      ]
     },
     {
       "account": "800821",
       "custom_fields": {
         "cost-center": "xxx",
-        "manufacturer-name-number": "yyy",
+        "manufacturer-name-number": "zzzz",
         "part-number": "4745451",
         "urgency": "5 - Need ASAP No Air Freight"
       },
@@ -38,7 +49,8 @@
       "line_number": "2",
       "name": "Pencils",
       "price": "50.00000000",
-      "purchaser_comment": ""
+      "purchaser_comment": "",
+      "vendors": []
     }
   ],
   "location": "2018-001",
