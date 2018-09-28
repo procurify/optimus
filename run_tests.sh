@@ -8,5 +8,4 @@ if ! [ -x "$(command -v pipenv)" ]; then
 fi
 
 pipenv install
-pipenv shell
-pytest tests
+$(pipenv --venv)/bin/pytest tests
