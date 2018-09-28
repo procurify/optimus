@@ -14,3 +14,9 @@ def test_rreplace_dict():
 
     output_data = rreplace(input_data, '-', '>', 2)
     assert output_data['fname'] == 'foo>bar>baz'
+
+
+def test_rreplace_list():
+    input_data = ['a-b-c', 'd-e-f', 'g-h-i']
+    output_data = rreplace(input_data, '-', '>', 1)
+    assert output_data == ['a-b>c', 'd-e>f', 'g-h>i']
