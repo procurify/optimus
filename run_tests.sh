@@ -7,5 +7,5 @@ if ! [ -x "$(command -v pipenv)" ]; then
   pip install pipenv
 fi
 
-pipenv install
+pipenv install --dev
 $(pipenv --venv)/bin/pytest tests
