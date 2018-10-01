@@ -20,6 +20,14 @@
                 && Object.getPrototypeOf(obj) === Object.prototype : false;
         }
 
+        function generate_uid() {
+            // From https://stackoverflow.com/a/6248722
+            let firstPart = (Math.random() * 46656) | 0;
+            let secondPart = (Math.random() * 46656) | 0;
+            firstPart = ("000" + firstPart.toString(36)).slice(-3);
+            secondPart = ("000" + secondPart.toString(36)).slice(-3);
+            return firstPart + secondPart;
+        }
 
         function get_type(type) {
             if (!type) type = 'string';
@@ -48,6 +56,7 @@
         }
 
         function handle_array(arr, schema, key) {
+            schema.id = generate_uid()
             schema.type = 'tuple'
             schema.source = key + '[*]'
             if (arr.length > 0) {
@@ -63,6 +72,7 @@
             if (is_schema(json)) {
                 return handle_schema(json, schema)
             }
+            schema.id = generate_uid()
             schema.type = 'object';
             schema.required = [];
             let props = schema.properties = {};
@@ -89,6 +99,7 @@
                     delete schema.required
                 }
             } else {
+                schema.id = generate_uid()
                 schema.type = get_type(json)
                 schema.source = key
             }
@@ -163,8 +174,7 @@
             update_schema: debounce(function (event) {
                 data.schema = JSON.parse(event.target.innerText)
                 this.$emit('schema_generated', data.schema)
-                console.log(json_formatter(data.schema))
-            }, 1000)
+            }, 200)
         },
         watch: {
             source: function (new_value, old_value) {

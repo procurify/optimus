@@ -3,13 +3,16 @@
         <h1>Optimus</h1>
 
         <div class="container">
-            <div class="left-column">
+            <div class="column">
                 <file-upload @file_uploaded="onFileUploaded"></file-upload>
             </div>
-            <div class="mid-column">
+            <div class="column">
                 <schema-editor :source="source" @schema_generated="onSchemaGenerated"></schema-editor>
             </div>
-            <div class="right-column">
+            <div class="column">
+                <schema-renderer :schema="schema"></schema-renderer>
+            </div>
+            <div class="column">
                 <transformer :source="source" :schema="schema"></transformer>
             </div>
         </div>
@@ -21,11 +24,13 @@
     import HeaderComponent from './components/Header.vue'
     import FileUpload from './components/FileUpload.vue'
     import SchemaEditor from './components/SchemaEditor.vue'
+    import SchemaRenderer from './components/schema_renderer/SchemaRenderer.vue'
     import Transformer from './components/Transformer.vue'
 
     const data = {
         source: null,
         schema: null,
+        name: null,
         transformed: null,
     }
 
@@ -34,6 +39,7 @@
             HeaderComponent,
             FileUpload,
             SchemaEditor,
+            SchemaRenderer,
             Transformer,
         },
 
