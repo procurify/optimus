@@ -4,43 +4,42 @@
                      v-if="instance != null"
                      @close="saveInstance"></object-form>
 
-        <node :schema="schema.properties"
+        <node :schema="local_schema.properties"
               :selectionHandler="selectInstance"
-              v-if="schema !== null"></node>
+              v-if="local_schema !== null"></node>
     </div>
 </template>
 
 <script>
 
-    import {find} from 'lodash'
+    import {find, cloneDeep} from 'lodash'
     import Node from './Node.vue'
     import ObjectForm from './ObjectForm.vue'
 
-    const data = {
-        instance: null,
-
-    }
 
     const findObjectByID = function (schema, id) {
+        let result = null
         const keys = Object.keys(schema)
 
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i]
             const value = schema[key]
 
+            if (value.id === id) {
+                result = value
+            }
+
+            if (result !== null) break
+
             if (value.type === "object") {
-                return findObjectByID(value.properties, id)
+                result = findObjectByID(value.properties, id)
             } else if (value.type === "array") {
-                return findObjectByID(value.items.properties, id)
-            } else {
-                if (value.id === id) {
-                    return value
-                }
+                result = findObjectByID(value.items.properties, id)
             }
 
         }
 
-        return null
+        return result
     }
 
     export default {
@@ -48,27 +47,30 @@
 
         props: {
             schema: Object,
-            schema_edited: Function
         },
 
         data: function () {
-            return data
+            return {
+                instance: null,
+                local_schema: null
+            }
         },
 
         methods: {
             selectInstance: function (id) {
-                data.instance = findObjectByID(this.schema.properties, id)
+                this.instance = findObjectByID(this.local_schema.properties, id)
             },
             saveInstance: function () {
-                data.instance = null
-                this.$emit('schema_edited', this.schema)
+                this.instance = null
+                this.$emit('update:schema', this.local_schema)
             }
         },
 
         watch: {
-            // schema: function (new_value) {
-            //     data.rendered_schema = {schema: new_value}
-            // }
+            schema: function (new_value, old_value) {
+                this.local_schema = cloneDeep(new_value)
+
+            }
         },
 
         components: {

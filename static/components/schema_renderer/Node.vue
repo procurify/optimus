@@ -1,8 +1,8 @@
 <template>
     <ul>
         <li v-for="(value, key) in schema">
-            <a href="#" v-on:click="selectionHandler(value['id'])">
-                {{ key }}: {{ value['source'] }} ({{ value['type'] }})
+            <a v-on:click.stop="selectionHandler(value['id'])">
+                {{ key }}: {{ value['source'] }}
             </a>
 
             <node :schema="value['items']['properties']"
@@ -28,5 +28,7 @@
 </script>
 
 <style scoped>
-
+a {
+    cursor: pointer;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
-    <div class="full-width containert">
-        <h1>Optimus</h1>
+    <div class="full-width">
+        <h1><a href="/"><> <> <></a></h1>
 
         <div class="container">
             <div class="column">
@@ -10,7 +10,7 @@
                 <schema-editor :source="source" @schema_generated="onSchemaGenerated"></schema-editor>
             </div>
             <div class="column">
-                <schema-renderer :schema="schema"></schema-renderer>
+                <schema-renderer :schema="schema" v-on:update:schema="onSchemaGenerated"></schema-renderer>
             </div>
             <div class="column">
                 <transformer :source="source" :schema="schema"></transformer>

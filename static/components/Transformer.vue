@@ -14,10 +14,11 @@
             source: Object,
             schema: Object
         },
+
         data: function () {
             return data
         },
-        computed: {},
+
         watch: {
             schema: debounce(function (new_value, old_value) {
                 const xhr = new XMLHttpRequest();
