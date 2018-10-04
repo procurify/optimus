@@ -4,72 +4,57 @@
                      v-if="instance != null"
                      @close="saveInstance"></object-form>
 
-        <node :schema="local_schema.properties"
+        <node :schema="schema.properties"
               :selectionHandler="selectInstance"
-              v-if="local_schema !== null"></node>
+              v-if="schema !== null"></node>
     </div>
 </template>
 
 <script>
 
-    import {find, cloneDeep} from 'lodash'
+    import {cloneDeep} from 'lodash'
     import Node from './Node.vue'
     import ObjectForm from './ObjectForm.vue'
+    import {
+        schemaGenerator,
+        findObjectByID,
+        redrawSchema
+    } from '../../utils'
 
 
-    const findObjectByID = function (schema, id) {
-        let result = null
-        const keys = Object.keys(schema)
-
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i]
-            const value = schema[key]
-
-            if (value.id === id) {
-                result = value
-            }
-
-            if (result !== null) break
-
-            if (value.type === "object") {
-                result = findObjectByID(value.properties, id)
-            } else if (value.type === "array") {
-                result = findObjectByID(value.items.properties, id)
-            }
-
-        }
-
-        return result
+    const data = {
+        instance: null,
+        schema: null
     }
 
     export default {
         name: 'schema-renderer',
 
         props: {
-            schema: Object,
+            source: Object,
         },
 
         data: function () {
-            return {
-                instance: null,
-                local_schema: null
-            }
+            return data
         },
 
         methods: {
             selectInstance: function (id) {
-                this.instance = findObjectByID(this.local_schema.properties, id)
+                data.instance = findObjectByID(data.schema.properties, id)
             },
             saveInstance: function () {
-                this.instance = null
-                this.$emit('update:schema', this.local_schema)
+                data.instance = null
+                const local_schema = cloneDeep(data.schema)
+                redrawSchema(local_schema.properties)
+                data.schema = local_schema
+                this.$emit('schema_generated', data.schema)
             }
         },
 
         watch: {
-            schema: function (new_value, old_value) {
-                this.local_schema = cloneDeep(new_value)
-
+            source: function (new_value, old_value) {
+                data.schema = schemaGenerator(new_value)
+                this.$emit('schema_generated', data.schema)
             }
         },
 

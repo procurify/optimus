@@ -28,7 +28,7 @@
 </script>
 
 <style scoped>
-a {
-    cursor: pointer;
-}
+    a {
+        cursor: pointer;
+    }
 </style>

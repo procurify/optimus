@@ -33,7 +33,7 @@
                     "input_json": this.source,
                     "schema": new_value
                 }))
-            }, 1000)
+            }, 200)
         }
     }
 </script>
