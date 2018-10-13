@@ -179,7 +179,9 @@ const findObjectByID = function (schema, id) {
     return result
 }
 
+
 const redrawSchema = function (local_schema) {
+    const result = {}
     const keys = Object.keys(local_schema)
 
     for (let i = 0; i < keys.length; i++) {
@@ -187,17 +189,19 @@ const redrawSchema = function (local_schema) {
         const value = local_schema[key]
 
         if ('key' in value) {
-            delete local_schema[key]
-            local_schema[value.key] = value
+            result[value.key] = value
+        } else {
+            result[key] = value
         }
 
         if (value.type === "object") {
-            redrawSchema(value.properties)
+            result[key] = redrawSchema(value.properties)
         } else if (value.type === "array") {
-            redrawSchema(value.items.properties)
+            result[key] = redrawSchema(value.items.properties)
         }
-
     }
+
+    return result
 }
 
 

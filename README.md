@@ -25,3 +25,7 @@ A schema transformation tool using JSON Schema and JSONPath
 ### Run application
 
 `FLASK_APP=app.py FLASK_ENV=development python -m flask run`
+
+### Run UI
+
+`npm run dev`

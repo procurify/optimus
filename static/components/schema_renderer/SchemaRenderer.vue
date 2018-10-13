@@ -7,6 +7,8 @@
         <node :schema="schema.properties"
               :selectionHandler="selectInstance"
               v-if="schema !== null"></node>
+
+        <button v-on:click="printSchema">&#128424;</button>
     </div>
 </template>
 
@@ -45,9 +47,12 @@
             saveInstance: function () {
                 data.instance = null
                 const local_schema = cloneDeep(data.schema)
-                redrawSchema(local_schema.properties)
+                local_schema.properties = redrawSchema(local_schema.properties)
                 data.schema = local_schema
                 this.$emit('schema_generated', data.schema)
+            },
+            printSchema: function () {
+                console.log(JSON.parse(JSON.stringify(this.schema)))
             }
         },
 
