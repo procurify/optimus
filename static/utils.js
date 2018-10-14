@@ -1,4 +1,14 @@
-import {debounce} from 'lodash';
+import {debounce, forOwn, omitBy} from 'lodash';
+
+// From https://stackoverflow.com/a/6248722
+const generate_uid = function () {
+    let firstPart = (Math.random() * 46656) | 0;
+    let secondPart = (Math.random() * 46656) | 0;
+    firstPart = ('000' + firstPart.toString(36)).slice(-3);
+    secondPart = ('000' + secondPart.toString(36)).slice(-3);
+    return firstPart + secondPart;
+}
+
 
 const schemaGenerator = function (source) {
     const schema = {}
@@ -13,14 +23,6 @@ const schemaGenerator = function (source) {
             && Object.getPrototypeOf(obj) === Object.prototype : false;
     }
 
-    function generate_uid() {
-        // From https://stackoverflow.com/a/6248722
-        let firstPart = (Math.random() * 46656) | 0;
-        let secondPart = (Math.random() * 46656) | 0;
-        firstPart = ("000" + firstPart.toString(36)).slice(-3);
-        secondPart = ("000" + secondPart.toString(36)).slice(-3);
-        return firstPart + secondPart;
-    }
 
     function get_type(type) {
         if (!type) type = 'string';
@@ -53,7 +55,7 @@ const schemaGenerator = function (source) {
         schema.type = 'tuple'
         schema.source = key + '[*]'
         if (arr.length > 0) {
-            if (typeof arr[0] === "object") {
+            if (typeof arr[0] === 'object') {
                 schema.type = 'array'
                 let props = schema.items = {}
                 parse(arr[0], props)
@@ -102,56 +104,6 @@ const schemaGenerator = function (source) {
     return schema
 }
 
-const json_formatter = (function (source) {
-    const NUM_TYPE = 'number'
-    const STR_TYPE = 'string'
-    const BOOL_TYPE = 'boolean'
-    const ARR_TYPE = 'array'
-    const OBJ_TYPE = 'object'
-
-    const get_type = function (data) {
-        const data_type = typeof data
-        if (data_type === OBJ_TYPE) {
-            if (Array.isArray(data_type)) {
-                return ARR_TYPE
-            }
-            return OBJ_TYPE
-        }
-        return data_type
-    }
-
-    const iterate = function (data) {
-        let output = ''
-        const data_type = get_type(data)
-
-        console.log(data_type)
-
-        if (data_type === ARR_TYPE) {
-            output += '<ul>'
-            for (let item of data) {
-                output += iterate(item)
-            }
-            output += '</ul>'
-        } else if (data_type === OBJ_TYPE) {
-            output += '<ul>'
-            for (const [key, value] of Object.entries(data)) {
-                const _data_type = get_type(value)
-                if (_data_type === ARR_TYPE || _data_type === OBJ_TYPE) {
-                    output += `<li>${key} ${iterate(value)}</li>`
-                } else {
-                    output += iterate(`${key}: ${value}`)
-                }
-            }
-            output += '</ul>'
-        }
-
-        output += `<li>${data}</li>`
-        return output
-    }
-
-    return iterate(source)
-})
-
 
 const findObjectByID = function (schema, id) {
     let result = null
@@ -168,12 +120,69 @@ const findObjectByID = function (schema, id) {
 
         if (result !== null) break
 
-        if (value.type === "object") {
+        if (value.type === 'object') {
             result = findObjectByID(value.properties, id)
-        } else if (value.type === "array") {
+        } else if (value.type === 'array') {
             result = findObjectByID(value.items.properties, id)
         }
+    }
 
+    return result
+}
+
+
+const createObjectByID = function (schema, id) {
+    let result = {}
+    const keys = Object.keys(schema)
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const value = schema[key]
+
+        if (value.id === id) {
+            console.log(schema, value, id)
+            // const new_field = 'new_field'
+            // result.properties[new_field] = {
+            //     id: generate_uid(),
+            //     source: new_field,
+            //     type: 'string'
+            // }
+        }
+
+        result[key] = value
+
+        if (value.type === 'object') {
+            value.properties = deleteObjectByID(value.properties, id)
+            result[key] = value
+        } else if (value.type === 'array') {
+            value.items.properties = deleteObjectByID(value.items.properties, id)
+            result[key] = value
+        }
+    }
+
+    return result
+}
+
+
+const deleteObjectByID = function (schema, id) {
+    let result = {}
+    const keys = Object.keys(schema)
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const value = schema[key]
+
+        if (value.id !== id) {
+            result[key] = value
+
+            if (value.type === 'object') {
+                value.properties = deleteObjectByID(value.properties, id)
+                result[key] = value
+            } else if (value.type === 'array') {
+                value.items.properties = deleteObjectByID(value.items.properties, id)
+                result[key] = value
+            }
+        }
     }
 
     return result
@@ -188,17 +197,18 @@ const redrawSchema = function (local_schema) {
         const key = keys[i]
         const value = local_schema[key]
 
+        if (value.type === 'object') {
+            value.properties = redrawSchema(value.properties)
+        } else if (value.type === 'array') {
+            value.items.properties = redrawSchema(value.items.properties)
+        }
+
         if ('key' in value) {
             result[value.key] = value
         } else {
             result[key] = value
         }
 
-        if (value.type === "object") {
-            result[key] = redrawSchema(value.properties)
-        } else if (value.type === "array") {
-            result[key] = redrawSchema(value.items.properties)
-        }
     }
 
     return result
@@ -208,5 +218,7 @@ const redrawSchema = function (local_schema) {
 export {
     schemaGenerator,
     findObjectByID,
-    redrawSchema
+    redrawSchema,
+    deleteObjectByID,
+    createObjectByID
 }

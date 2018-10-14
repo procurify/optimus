@@ -26,6 +26,21 @@
                             <input type="text" name="source" id="source" v-model="instance.source"
                                    class="form-control">
 
+                            <br>
+
+                            <div v-if="!instance.id">
+                                <label for="type">
+                                    Type:
+                                </label>
+                                <select name="type" id="type" v-model="instance.type">
+                                    <option value="string">String</option>
+                                    <option value="number">Number</option>
+                                    <option value="tuple">Tuple</option>
+                                    <option value="object">Object</option>
+                                    <option value="array">Array</option>
+                                </select>
+                            </div>
+
                         </slot>
                     </div>
 

@@ -14,13 +14,15 @@
 
 <script>
 
-    import {cloneDeep} from 'lodash'
+    import {cloneDeep, omit} from 'lodash'
     import Node from './Node.vue'
     import ObjectForm from './ObjectForm.vue'
     import {
         schemaGenerator,
         findObjectByID,
-        redrawSchema
+        redrawSchema,
+        deleteObjectByID,
+        createObjectByID
     } from '../../utils'
 
 
@@ -41,8 +43,24 @@
         },
 
         methods: {
-            selectInstance: function (id) {
-                data.instance = findObjectByID(data.schema.properties, id)
+            selectInstance: function (id, action) {
+                switch (action) {
+                    case 'CREATE':
+                        data.instance = createObjectByID(data.schema, id)
+                        break
+                    case 'EDIT':
+                        data.instance = findObjectByID(data.schema.properties, id)
+                        break
+                    case 'DELETE':
+                        const local_schema = cloneDeep(data.schema)
+                        local_schema.properties = deleteObjectByID(local_schema.properties, id)
+                        data.schema = local_schema
+                        this.$emit('schema_generated', data.schema)
+                        break
+                    default:
+                        // Nothing
+                }
+
             },
             saveInstance: function () {
                 data.instance = null
