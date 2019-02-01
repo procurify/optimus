@@ -87,6 +87,10 @@ def generate_transformation(input_data, schema, source_prefix=''):
 
         else:
             output[key] = value['source']
+            try:
+                basestring
+            except NameError:
+                basestring = str
             if isinstance(value['source'], basestring):
                 output[key] = _source_prefix + value['source']
 
