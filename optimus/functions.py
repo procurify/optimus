@@ -15,7 +15,10 @@ def default_value(value, alternate_value):
 
 def format_date(value, format):
     date_value = arrow.get(value)
-    return date_value.format(format)
+    result = date_value.format(format)
+    if result.isdigit():
+        return int(result)
+    return result
 
 
 def boolean(value, true_repr, false_repr):
