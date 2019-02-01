@@ -77,6 +77,20 @@ def test_format_date(purchase_order_data, purchase_order_schema):
     assert purchase_order_data != transformed_data
     assert transformed_data['date'] == '02-06-2018'
 
+    # Format unix timestamp
+    pos['properties']['date'] = {
+        'type': 'function',
+        'source': ['format_date', ['date'], ['X']]
+    }
+
+    transformed_data = transform(
+        purchase_order_data,
+        purchase_order_schema
+    )
+
+    assert type(transformed_data['date']) == int
+    assert isinstance(transformed_data['date'], int)
+
 
 def test_boolean(vendor_data, vendor_schema):
     vendor_schema['properties']['is_1099_eligible'] = {
