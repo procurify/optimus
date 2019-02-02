@@ -16,6 +16,7 @@ flask = "*"
 arrow = "*"
 pycountry = "*"
 flask-cors = "*"
+six = "*"
 
 [requires]
 python_version = "2.7"

@@ -1,6 +1,6 @@
 import inspect
 from collections import namedtuple
-
+from six import string_types
 from jsonpath_rw import parse
 
 from optimus import functions
@@ -87,7 +87,7 @@ def generate_transformation(input_data, schema, source_prefix=''):
 
         else:
             output[key] = value['source']
-            if isinstance(value['source'], basestring):
+            if isinstance(value['source'], string_types):
                 output[key] = _source_prefix + value['source']
 
     return output
