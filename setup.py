@@ -12,7 +12,7 @@ VERSION = '0.1.1'
 REQUIRED = [
     'jsonschema==2.6.0',
     'jsonpath-rw==1.4.0',
-    'arrow==0.12.1'
+    'arrow==0.13.1'
 ]
 
 setup(
