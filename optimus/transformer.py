@@ -24,7 +24,7 @@ def _handle_function(input_data, func):
     assert len(func.values) == len(values), "Unable parse some values"
 
     args = values + func.args
-    _required_no_of_args = inspect.getargspec(function).args
+    _required_no_of_args = inspect.getfullargspec(function).args
     assert len(_required_no_of_args) == len(args), (
         "Number of arguments mismatch. {} != {}".format(
             len(_required_no_of_args), len(args)
