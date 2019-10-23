@@ -10,9 +10,9 @@ VERSION = '0.1.2'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'jsonschema==2.6.0',
+    'jsonschema==3.1.1',
     'jsonpath-rw==1.4.0',
-    'arrow==0.13.1'
+    'arrow==0.15.2'
 ]
 
 setup(
