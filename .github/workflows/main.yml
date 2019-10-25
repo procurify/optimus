@@ -20,7 +20,4 @@ jobs:
       - name: Run tests
         env:
           PYTEST_USER: root
-        run: |
-          export DISPLAY=:99.0
-          sh -e /etc/init.d/xvfb start
-          /bin/bash run_tests.sh
+        run: /bin/bash run_tests.sh
