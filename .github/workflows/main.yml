@@ -13,7 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout Branch
+        uses: actions/checkout@v1
+      - name: Install dependencies
+        uses: pip install
       - name: Run tests
         env:
           PYTEST_USER: root
