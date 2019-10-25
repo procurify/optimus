@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - development
+      - master
+      - feature/*
+
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run tests
+        env:
+          PYTEST_USER: root
+        run: |
+          export DISPLAY=:99.0
+          sh -e /etc/init.d/xvfb start
+          /bin/bash run_tests.sh
