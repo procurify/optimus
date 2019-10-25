@@ -1,11 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - development
-      - master
-      - feature/*
+on: [push, pull_request]
 
 jobs:
   build:
