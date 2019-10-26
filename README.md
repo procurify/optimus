@@ -1,5 +1,5 @@
 # Optimus
-![Build status](https://travis-ci.com/procurify/optimus.svg?branch=master "Optimus build status")
+[![Actions Status](https://github.com/procurify/optimus/workflows/CI/badge.svg)](https://github.com/procurify/optimus/actions)
 
 A schema transformation tool using JSON Schema and JSONPath
 
