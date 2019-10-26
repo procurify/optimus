@@ -83,3 +83,30 @@ def test_missing_field_in_source_data(
 
     for item in transformed_data['items']:
         assert item['custom_fields']['cost-center'] == ''
+
+
+def test_wrap_fields_in_an_object(purchase_order_data, purchase_order_schema):
+    vendor_properties = purchase_order_schema['properties']['vendor']['properties']
+    vendor_properties['phones'] = {
+        'type': 'object',
+        'source': '`this`',
+        'properties': {
+            'phoneOne': {
+                'type': 'string',
+                'source': 'phoneOne'
+            },
+            'phoneTwo': {
+                'type': 'string',
+                'source': 'phoneTwo'
+            }
+        }
+    }
+
+    transformed_data = transform(
+        purchase_order_data,
+        purchase_order_schema
+    )
+    vendor = transformed_data['vendor']
+    source_vendor = purchase_order_data['vendor']
+    assert vendor['phones']['phoneOne'] == source_vendor['phoneOne']
+    assert vendor['phones']['phoneTwo'] == source_vendor['phoneTwo']
