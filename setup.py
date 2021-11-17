@@ -7,6 +7,7 @@ URL = "https://github.com/procurify/optimus"
 EMAIL = "nav@navaulakh.com"
 AUTHOR = "Nav Aulakh"
 VERSION = "0.1.2"
+PACKAGES = ["optimus"]
 
 # What packages are required for this module to be executed?
 REQUIRED = ["jsonschema==3.1.1", "jsonpath-rw==1.4.0", "arrow==0.15.2"]
@@ -14,6 +15,7 @@ REQUIRED = ["jsonschema==3.1.1", "jsonpath-rw==1.4.0", "arrow==0.15.2"]
 setup(
     name=NAME,
     version=VERSION,
+    packages=PACKAGES,
     description=DESCRIPTION,
     author=AUTHOR,
     author_email=EMAIL,
