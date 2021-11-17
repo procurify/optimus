@@ -27,7 +27,7 @@
   "homepage": "https://github.com/procurify/optimus#readme",
   "dependencies": {
     "json-formatter-js": "^2.2.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "vue": "^2.5.22"
   },
   "devDependencies": {
